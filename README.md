@@ -79,7 +79,8 @@ You need to set up an Amazon LightSail, create an Ubuntu instance and download P
 - Make new folder named catalog: `sudo mkdir catalog` and move to: `cd catalog/`
 - Clone the application from github.com under new folder 'catalog': `sudo git clone https://github.com/vietdang7/catalog.git catalog`
 - Create 'catalog.wsgi': `sudo touch catalog.wsgi`
-- Edit the file: `sudo nano catalog.wsgi` and add these line: `
+- Edit the file: `sudo nano catalog.wsgi` and add these line: 
+```
 #!/usr/bin/python
 import sys
 import logging
@@ -89,7 +90,8 @@ sys.path.insert(0, "/var/www/catalog/")
 from catalog import app as application
 application.secret_key = 'supersecretkey'`
 - Move to: `cd catalog/`
-- Change name of 'catalog.py' to: `sudo mv catalog.py __init__.py`
+- Change name of 'catalog.py' to: `sudo mv catalog.py __init__.py
+```
 
 ### 14. Install virtualenv and Flask
 - Install pip: `sudo apt-get install python-pip`
