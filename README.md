@@ -132,3 +132,5 @@ application.secret_key = 'supersecretkey'
 
 ## 21. Restart Apache
 - `sudo service apache2 restart`
+
+Visit [18.196.4.252](http://18.196.4.252) to see the app.
