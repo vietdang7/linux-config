@@ -3,7 +3,7 @@ Linux Server Configuration for a Python Web Application . This is the final proj
 
 ## System Information
 - Virtual Machine (VM) is created by using Amazon LightSail. VM is running Ubuntu 16.04.2 LTS
-- Public IP: 35.156.28.166
+- Public IP: 18.196.4.252
 - Private Key (not shared)
 
 ## Prerequisites
@@ -15,7 +15,7 @@ You need to set up an Amazon LightSail, create an Ubuntu instance and download P
 `mv ~/Downloads/PrivateKey.pem ~/.ssh/`
 - Change permission of Private Key to 600: 
 `chmod 600 ~/.ssh/PrivateKey.pem`
-- Connect to VM: `ssh -i ~/.ssh/PrivateKey.pem ubuntu@35.156.28.166`
+- Connect to VM: `ssh -i ~/.ssh/PrivateKey.pem ubuntu@18.196.4.252`
 
 ### 2. Create user named 'grader'
 - Install `finger` to check user information later on: `sudo apt-get install finger`
@@ -48,5 +48,12 @@ You need to set up an Amazon LightSail, create an Ubuntu instance and download P
 - Change port from 22 to 2200
 - Edit `PermitRootLogin without-password` to `PermitRootLogin no`
 
-
-
+### 8. Configure UFW for ssh, http and ntp
+- Check the status of firewall: `sudo ufw status`
+- Block all incoming traffic for maximum security: `sudo ufw default deny incoming`
+- Allow outgoing: `sudo ufw default allow outgoing`
+- Allow incoming ssh connection (port 2200): `sudo ufw allow 2200/tcp`
+- Allow incoming http connection (port 80): `sudo ufw allow 80/tcp`
+- Allow incoming ntp connection (port 123): `sudo ufw allow 123/udp`
+- Enable UFW: `sudo ufw enable`
+- Login to your Amazon LightSailt > select your instance > Networking > Firewall > Add custom with port 2200
