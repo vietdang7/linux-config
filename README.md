@@ -88,10 +88,11 @@ logging.basicConfig(stream=sys.stderr)
 sys.path.insert(0, "/var/www/catalog/")
 
 from catalog import app as application
-application.secret_key = 'supersecretkey'`
+application.secret_key = 'supersecretkey'
+```
 - Move to: `cd catalog/`
 - Change name of 'catalog.py' to: `sudo mv catalog.py __init__.py
-```
+
 
 ### 14. Install virtualenv and Flask
 - Install pip: `sudo apt-get install python-pip`
@@ -125,3 +126,9 @@ application.secret_key = 'supersecretkey'`
 ### 19. Correct link to database in __init__.py and database_setup.py
 - Edit and change `engine = create_engine('sqlite:///catalog.db')` to `engine = create_engine('postgresql://catalog:password@localhost/catalog')`
 
+### 20. Setup database and add sample data
+- Run command: `sudo python database_setup.python`
+- Run command to add sample data: `sudo python sample_data.python`
+
+## 21. Restart Apache
+- `sudo service apache2 restart`
