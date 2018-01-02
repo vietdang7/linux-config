@@ -27,6 +27,16 @@ You need to set up an Amazon LightSail, create an Ubuntu instance and download P
 - Add this line: `grader ALL=(ALL:ALL) ALL`
 - Confirm the new permission by typing some `sudo` commands
 
+### 4. Generate ssh keys for grader
+- On your local machine, run `ssh-keygen`, enter file's location and password. You will have two keys (example: grader and grader.pub)
+- Read the key grader.pub by command: `cat .ssh/grader.pub`, copy the content
+
+### 5. Add ssh key to grader
+- Switch to grader by command: `su - grader`
+- Make .ssh directory: `mkdir .ssh`
+- Create authorized_keys file: `touch .ssh/authorized_keys`
+- Open the file with nano: `nano .ssh/authorized_keys` and paste the content of grader.pub key
+- Change folder and file permission: `chmod 700 .ssh` `chmod 644 .ssh/authorized_keys`
 
 
 
