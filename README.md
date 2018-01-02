@@ -56,4 +56,70 @@ You need to set up an Amazon LightSail, create an Ubuntu instance and download P
 - Allow incoming http connection (port 80): `sudo ufw allow 80/tcp`
 - Allow incoming ntp connection (port 123): `sudo ufw allow 123/udp`
 - Enable UFW: `sudo ufw enable`
-- Login to your Amazon LightSailt > select your instance > Networking > Firewall > Add custom with port 2200
+- Login to your Amazon LightSailt > select your instance > Networking > Firewall > Add custom with port 2200 
+- Add custom with port 123 for UDP
+- Add custom with port 80 for HTTP
+
+### 9. Change local time to UTC
+- `sudo dpkg-reconfigure tzdata` and select `None of above` and `UTC`
+
+### 10. Install Apache2 and its configuration for mod_wsgi
+- `sudo apt-get install apache2`
+- Edit for WSGI module: `sudo nano /etc/apache2/sites-enabled/000-default.conf`, add this line `WSGIScriptAlias / /var/www/html/myapp.wsgi` before the closing tag </VirtualHost>
+
+### 11. Install git to clone catalog application from github.com
+- `sudo apt-get install git`
+
+### 12. Install and enable mod_wsgi
+- Run command: `sudo apt-get install libapache2-mod-wsgi python-dev`
+- Enable mod_wsgi: `sudo a2enmod wsgi`
+
+### 13. Create new folder, clone from github.com and wsgi configuration
+- Move to: `cd /var/www`
+- Make new folder named catalog: `sudo mkdir catalog` and move to: `cd catalog/`
+- Clone the application from github.com under new folder 'catalog': `sudo git clone https://github.com/vietdang7/catalog.git catalog`
+- Create 'catalog.wsgi': `sudo touch catalog.wsgi`
+- Edit the file: `sudo nano catalog.wsgi` and add these line: `
+#!/usr/bin/python
+import sys
+import logging
+logging.basicConfig(stream=sys.stderr)
+sys.path.insert(0, "/var/www/catalog/")
+
+from catalog import app as application
+application.secret_key = 'supersecretkey'`
+- Move to: `cd catalog/`
+- Change name of 'catalog.py' to: `sudo mv catalog.py __init__.py`
+
+### 14. Install virtualenv and Flask
+- Install pip: `sudo apt-get install python-pip`
+- Install virtualenv : `sudo pip install virtualenv`
+- Create a new virtual environment: `sudo virtualenv venv`
+- Active venv to install Flask: `source venv/bin/activate`
+- Install Flask: `sudo pip install Flask`
+
+### 15. Install other dependencies
+- `sudo pip install httplib2 oauth2client sqlalchemy psycopg2 sqlalchemy_utils`
+- `sudo pip install requests`
+- `sudo pip install flask-seasurf`
+
+### 16. Update link to client_secrets.json
+- Edit the file: `sudo nano __init__.py`
+- Change client_secrets.json to: `/var/www/catalog/catalog/client_secrets.json`
+
+### 17. Config the virtual host
+- Run command: `sudo nano /etc/apache2/sites-available/catalog.conf`
+- Enable the virtual host `sudo a2ensite catalog`
+
+### 18. Install and config PostgreSQL
+- Run this command to install PostgreSQL: `sudo apt-get install postgresql`
+- Change to user 'postgres': `sudo su - postgres`
+- Run postgreSQL shell: `psql`
+- Create table and user name: `CREATE DATABASE catalog;` and `CREATE USER catalog;`
+- Create a password for user 'catalog': `ALTER ROLE catalog WITH PASSWORD 'password';`
+- Give user 'catalog' permission to table 'catalog': `GRANT ALL PRIVILEGES ON DATABASE catalog TO catalog;`
+- Run command to quit and exit: `\q` and `exit`
+
+### 19. Correct link to database in __init__.py and database_setup.py
+- Edit and change `engine = create_engine('sqlite:///catalog.db')` to `engine = create_engine('postgresql://catalog:password@localhost/catalog')`
+
